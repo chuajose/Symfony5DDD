@@ -31,7 +31,7 @@ final class UsernameTest extends TestCase{
 	 */
 	public function given_a_valid_username_it_should_create_a_valid_username(): void
 	{
-		$usernameString = 'lolaso.maximo';
+		$usernameString = 'lolaso-.maximo';
 		$username = Username::fromString($usernameString);
 		self::assertSame($usernameString, $username->__toString());
 	}
