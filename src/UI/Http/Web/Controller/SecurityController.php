@@ -1,15 +1,13 @@
 <?php
+
 declare( strict_types=1 );
+
 namespace App\UI\Http\Web\Controller;
 
 use App\Application\Auth\Dto\RegisterUserDto;
-use App\Application\Auth\Exceptions\RegisterUserException;
 use App\Application\Auth\RegisterUseCase;
-use App\Domain\Auth\Exception\EmailNotValidException;
-use App\Domain\Auth\Exception\UsernameNotValidException;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
 use Assert\AssertionFailedException;
-use Cassandra\Exception\ValidationException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -100,6 +98,10 @@ class SecurityController extends AbstractController
 				}
 
 			} catch ( \InvalidArgumentException $exception ) {
+				$messages[] = [
+					'detail' =>  $exception->getMessage(),
+				];
+			} catch ( AssertionFailedException $exception ) {
 				$messages[] = [
 					'detail' =>  $exception->getMessage(),
 				];

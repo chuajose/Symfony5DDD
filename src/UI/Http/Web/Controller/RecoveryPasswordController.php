@@ -29,13 +29,13 @@ use App\Infrastructure\Mailer\Sender\SenderInterface;
 
 final class RecoveryPasswordController extends AbstractController{
 
-	private $passwordRecovery;
-	private $userRepository;
-	private $userPasswordEncoder;
-	private $tokenGenerator;
-	private $mailer;
+	private PasswordRecoveryRepositoryInterface $passwordRecovery;
+	private AuthRepositoryInterface $userRepository;
+	private UserPasswordEncoderInterface $userPasswordEncoder;
+	private TokenGeneratorInterface $tokenGenerator;
+	private SenderInterface $mailer;
 
-	function __construct( PasswordRecoveryRepositoryInterface $passwordRecovery, AuthRepositoryInterface $userRepository, UserPasswordEncoderInterface $userPasswordEncoder,  TokenGeneratorInterface $tokenGenerator, SenderInterface $mailer ) {
+	public function __construct( PasswordRecoveryRepositoryInterface $passwordRecovery, AuthRepositoryInterface $userRepository, UserPasswordEncoderInterface $userPasswordEncoder,  TokenGeneratorInterface $tokenGenerator, SenderInterface $mailer ) {
 
 		$this->userRepository      = $userRepository;
 		$this->userPasswordEncoder = $userPasswordEncoder;
@@ -52,9 +52,9 @@ final class RecoveryPasswordController extends AbstractController{
 	 *     methods={"GET"}
 	 * )
 	 *
-	 * @throws \Twig_Error_Loader
-	 * @throws \Twig_Error_Runtime
-	 * @throws \Twig_Error_Syntax
+	 * @param Request $request
+	 *
+	 * @return Response
 	 */
 	public function forgotresetPassword( Request $request): Response {
 
@@ -67,7 +67,6 @@ final class RecoveryPasswordController extends AbstractController{
 	}
 
 
-
 	/**
 	 * @Route(
 	 *     "/password/forgotten",
@@ -75,9 +74,10 @@ final class RecoveryPasswordController extends AbstractController{
 	 *     methods={"POST"}
 	 * )
 	 *
-	 * @throws \Twig_Error_Loader
-	 * @throws \Twig_Error_Runtime
-	 * @throws \Twig_Error_Syntax
+	 * @param Request $request
+	 *
+	 * @return Response
+	 * @throws \Exception
 	 */
 	public function forgotPasswordPost( Request $request): Response {
 
@@ -90,7 +90,7 @@ final class RecoveryPasswordController extends AbstractController{
 		$expired =new \DateTimeImmutable('now');
 		$expired = $expired->add(new \DateInterval('PT45M')); // added 45 minutes
 
-		$passwordRecovery = new PasswordRecovery(rand(1,10), $user, $token, $expired );
+		$passwordRecovery = new PasswordRecovery(random_int(1,10), $user, $token, $expired );
 
 
 		if($existOld = $this->passwordRecovery->findOneByUser($user)){
@@ -115,16 +115,14 @@ final class RecoveryPasswordController extends AbstractController{
 	 *     methods={"GET"}
 	 * )
 	 *
-	 * @throws \Twig_Error_Loader
-	 * @throws \Twig_Error_Runtime
-	 * @throws \Twig_Error_Syntax
+	 * @param Request $request
+	 * @param $token
+	 *
+	 * @return Response
 	 */
 	public function resetPassword( Request $request, $token): Response {
 
 		$passwordRecovery = $this->passwordRecovery->findOneByToken($token);
-
-
-
 
 		if(null === $passwordRecovery){
 
@@ -152,9 +150,10 @@ final class RecoveryPasswordController extends AbstractController{
 	 *     methods={"POST"}
 	 * )
 	 *
-	 * @throws \Twig_Error_Loader
-	 * @throws \Twig_Error_Runtime
-	 * @throws \Twig_Error_Syntax
+	 * @param Request $request
+	 * @param $token
+	 *
+	 * @return Response
 	 */
 	public function resetPasswordPost( Request $request, $token): Response {
 

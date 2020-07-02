@@ -61,7 +61,7 @@ final class Password {
 
 		if(!empty($errors)){
 			throw new PasswordNotValidException(
-				json_encode($errors), 'password_insecure', 422);
+				json_encode($errors), 0, null);
 		}
 	}
 

@@ -16,7 +16,7 @@ final class Username {
 	public function __construct(string $username) {
 
 		if(preg_match('/[^A-Za-z0-9_.-]/', $username)){
-			throw new UsernameNotValidException('Only alphanumeric and - are valid');
+			throw new UsernameNotValidException('Only alphanumeric and - or . are valid');
 		}
 		if (strlen($username) < self::MINIMUM_LENGTH) {
 			throw new UsernameNotValidException('This value is too short. It should have 6 characters or more');
