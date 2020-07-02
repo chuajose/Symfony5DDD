@@ -1,4 +1,7 @@
 <?php
+
+declare( strict_types=1 );
+
 namespace App\Infrastructure\oAuth2Server\Bridge;
 
 use League\OAuth2\Server\Entities\Traits\EntityTrait;

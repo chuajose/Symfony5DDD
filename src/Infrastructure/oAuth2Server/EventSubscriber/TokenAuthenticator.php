@@ -1,14 +1,11 @@
 <?php
-/**
- * Created by jeek.
- * User: Jose Manuel Suárez Bravo
- * Date: 11/02/19
- * Time: 10:03
- */
+
+declare( strict_types=1 );
 
 namespace App\Infrastructure\oAuth2Server\EventSubscriber;
 
 
+use App\Domain\Auth\Model\User;
 use App\Infrastructure\Persistence\Doctrine\Auth\AccessTokenRepository;
 use League\OAuth2\Server\ResourceServer;
 use Nyholm\Psr7\Factory\Psr17Factory;
@@ -26,13 +23,37 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
 use League\OAuth2\Server\Exception\OAuthServerException;
 
+/**
+ * Class TokenAuthenticator
+ * @package App\Infrastructure\oAuth2Server\EventSubscriber
+ */
 class TokenAuthenticator extends AbstractGuardAuthenticator {
 
-	private $userRepository;
-	private $accessTokenRepository;
-	private $resourceServer;
-	private $logger;
+	/**
+	 * @var AuthRepositoryInterface
+	 */
+	private AuthRepositoryInterface $userRepository;
+	/**
+	 * @var AccessTokenRepository
+	 */
+	private AccessTokenRepository $accessTokenRepository;
+	/**
+	 * @var ResourceServer
+	 */
+	private ResourceServer $resourceServer;
+	/**
+	 * @var LoggerInterface
+	 */
+	private LoggerInterface $logger;
 
+	/**
+	 * TokenAuthenticator constructor.
+	 *
+	 * @param AuthRepositoryInterface $userRepository
+	 * @param AccessTokenRepository $accessTokenRepository
+	 * @param ResourceServer $resourceServer
+	 * @param LoggerInterface $logger
+	 */
 	public function __construct( AuthRepositoryInterface $userRepository, AccessTokenRepository $accessTokenRepository, ResourceServer $resourceServer, LoggerInterface $logger ) {
 		$this->userRepository = $userRepository;
 		$this->accessTokenRepository = $accessTokenRepository;
@@ -44,8 +65,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator {
 	 * Called on every request to decide if this authenticator should be
 	 * used for the request. Returning false will cause this authenticator
 	 * to be skipped.
+	 *
+	 * @param Request $request
+	 *
+	 * @return bool
 	 */
-	public function supports( Request $request ) {
+	public function supports( Request $request ):bool {
 
 		//return $request->headers->has( 'X-AUTH-TOKEN' );
 		return $request->headers->has( 'Authorization' );
@@ -54,8 +79,13 @@ class TokenAuthenticator extends AbstractGuardAuthenticator {
 	/**
 	 * Called on every request. Return whatever credentials you want to
 	 * be passed to getUser() as $credentials.
+	 *
+	 * @param Request $request
+	 *
+	 * @return array
+	 * @throws OAuthServerException
 	 */
-	public function getCredentials( Request $request ) {
+	public function getCredentials( Request $request ):array {
 		$psr17Factory = new Psr17Factory();
 		$psrRequest = (new PsrHttpFactory($psr17Factory, $psr17Factory, $psr17Factory, $psr17Factory))->createRequest($request);
 //		$psrRequest = (new DiactorosFactory())->createRequest($request);
@@ -75,6 +105,12 @@ class TokenAuthenticator extends AbstractGuardAuthenticator {
 		];
 	}
 
+	/**
+	 * @param mixed $credentials
+	 * @param UserProviderInterface $userProvider
+	 *
+	 * @return User|bool|UserInterface|null
+	 */
 	public function getUser( $credentials, UserProviderInterface $userProvider ) {
 
 		$apiToken = $credentials['token'];
@@ -86,19 +122,38 @@ class TokenAuthenticator extends AbstractGuardAuthenticator {
 		return $this->userRepository->find(Uuid::fromString($apiToken));
 	}
 
-	public function checkCredentials( $credentials, UserInterface $user ) {
+	/**
+	 * @param mixed $credentials
+	 * @param UserInterface $user
+	 *
+	 * @return bool
+	 */
+	public function checkCredentials( $credentials, UserInterface $user ):bool {
 		// check credentials - e.g. make sure the password is valid
 		// no credential check is needed in this case
 		// return true to cause authentication success
 		return true;
 	}
 
-	public function onAuthenticationSuccess( Request $request, TokenInterface $token, $providerKey ) {
+	/**
+	 * @param Request $request
+	 * @param TokenInterface $token
+	 * @param string $providerKey
+	 *
+	 * @return Response|null
+	 */
+	public function onAuthenticationSuccess( Request $request, TokenInterface $token, $providerKey ):?Response {
 		// on success, let the request continue
 		$this->logger->critical('login');
 		return null;
 	}
 
+	/**
+	 * @param Request $request
+	 * @param AuthenticationException $exception
+	 *
+	 * @return JsonResponse|Response|null
+	 */
 	public function onAuthenticationFailure( Request $request, AuthenticationException $exception ) {
 		$data = [
 			'message' => strtr( $exception->getMessageKey(), $exception->getMessageData() )
@@ -113,6 +168,11 @@ class TokenAuthenticator extends AbstractGuardAuthenticator {
 
 	/**
 	 * Called when authentication is needed, but it's not sent
+	 *
+	 * @param Request $request
+	 * @param AuthenticationException|null $authException
+	 *
+	 * @return JsonResponse
 	 */
 	public function start( Request $request, AuthenticationException $authException = null ) {
 		$data = [
@@ -122,7 +182,10 @@ class TokenAuthenticator extends AbstractGuardAuthenticator {
 		return new JsonResponse( $data, Response::HTTP_UNAUTHORIZED );
 	}
 
-	public function supportsRememberMe() {
+	/**
+	 * @return bool
+	 */
+	public function supportsRememberMe():bool {
 		return false;
 	}
 }

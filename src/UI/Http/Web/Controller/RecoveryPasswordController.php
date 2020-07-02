@@ -82,6 +82,9 @@ final class RecoveryPasswordController extends AbstractController{
 	public function forgotPasswordPost( Request $request): Response {
 
 		$user = $this->userRepository->findOneByEmail($request->get('email'));
+		if($user === null){
+			throw new \Exception('no exist urs');
+		}
 		$token = $this->tokenGenerator->generateToken();
 
 		$expired =new \DateTimeImmutable('now');

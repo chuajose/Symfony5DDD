@@ -2,13 +2,6 @@
 
 declare( strict_types=1 );
 
-/**
- * Created by lawyersapp.
- * User: Jose Manuel Suárez Bravo
- * Date: 1/7/20
- * Time: 14:42
- */
-
 namespace App\Infrastructure\oAuth2Server\EventSubscriber;
 
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
@@ -37,15 +30,15 @@ final class TokenSubscriber implements EventSubscriberInterface
 	/**
 	 * @var ResourceServer
 	 */
-	private $resourceServer;
+	private ResourceServer $resourceServer;
 	/**
 	 * @var AuthRepositoryInterface
 	 */
-	private $userRepository;
+	private AuthRepositoryInterface $userRepository;
 	/**
 	 * @var AuthorizationCheckerInterface
 	 */
-	protected $authorizationChecker;
+	protected AuthorizationCheckerInterface $authorizationChecker;
 
 	/**
 	 * TokenSubscriber constructor.

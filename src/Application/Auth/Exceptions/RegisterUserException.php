@@ -12,7 +12,7 @@ declare( strict_types=1 );
 namespace App\Application\Auth\Exceptions;
 
 
-final class RegisterUserException extends \Exception {
+final class RegisterUserException extends \RuntimeException {
 
 	public function __construct( string $message = "", $code = 0) {
 		parent::__construct( $message, $code );

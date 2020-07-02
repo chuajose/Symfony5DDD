@@ -1,4 +1,7 @@
 <?php
+
+declare( strict_types=1 );
+
 namespace App\Infrastructure\oAuth2Server\Bridge;
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -7,7 +10,8 @@ use League\OAuth2\Server\Entities\Traits\EntityTrait;
 final class Scope implements ScopeEntityInterface
 {
 	use EntityTrait;
-	public static $scopes = [];
+
+	public static array $scopes = [];
 	/**
 	 * Scope constructor.
 	 * @param $name

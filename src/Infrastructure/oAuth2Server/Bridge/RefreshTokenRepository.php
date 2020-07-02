@@ -1,32 +1,53 @@
 <?php
-namespace App\Infrastructure\oAuth2Server\Bridge;
 
+declare( strict_types=1 );
+
+namespace App\Infrastructure\oAuth2Server\Bridge;
 
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
 use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use App\Domain\Auth\Repository\RefreshTokenRepositoryInterface as AppRefreshTokenRepositoryInterface;
 use App\Domain\Auth\Model\RefreshToken as AppRefreshToken;
 
+/**
+ * Class RefreshTokenRepository
+ * @package App\Infrastructure\oAuth2Server\Bridge
+ */
 final class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
 
 
-	private $appRefreshTokenRepository;
-	private $accessTokenRepository;
+	/**
+	 * @var AppRefreshTokenRepositoryInterface
+	 */
+	private AppRefreshTokenRepositoryInterface $appRefreshTokenRepository;
+	/**
+	 * @var AccessTokenRepository
+	 */
+	private AccessTokenRepository $accessTokenRepository;
 
 
+	/**
+	 * RefreshTokenRepository constructor.
+	 *
+	 * @param AppRefreshTokenRepositoryInterface $appRefreshTokenRepository
+	 * @param AccessTokenRepository $accessTokenRepository
+	 */
 	public function __construct(AppRefreshTokenRepositoryInterface $appRefreshTokenRepository, AccessTokenRepository $accessTokenRepository)
 	{
 		$this->appRefreshTokenRepository = $appRefreshTokenRepository;
 		$this->accessTokenRepository = $accessTokenRepository;
 	}
 
+
 	/**
+	 * @return RefreshTokenEntityInterface
 	 */
 	public function getNewRefreshToken(): RefreshTokenEntityInterface {
 		return new RefreshToken();
 	}
 
 	/**
+	 * @param RefreshTokenEntityInterface $refreshTokenEntity
 	 */
 	public function persistNewRefreshToken( RefreshTokenEntityInterface $refreshTokenEntity): void {
 		$id                        = $refreshTokenEntity->getIdentifier();
@@ -37,6 +58,7 @@ final class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
 	}
 
 	/**
+	 * @param $tokenId
 	 */
 	public function revokeRefreshToken( $tokenId ): void {
 		$refreshTokenPersistEntity = $this->appRefreshTokenRepository->find( $tokenId );
@@ -48,6 +70,9 @@ final class RefreshTokenRepository implements RefreshTokenRepositoryInterface {
 	}
 
 	/**
+	 * @param $tokenId
+	 *
+	 * @return bool
 	 */
 	public function isRefreshTokenRevoked( $tokenId ): bool {
 		$refreshTokenPersistEntity = $this->appRefreshTokenRepository->find( $tokenId );

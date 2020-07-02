@@ -1,5 +1,7 @@
 <?php
 
+declare( strict_types=1 );
+
 namespace App\UI\Http\Web\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -15,13 +17,13 @@ class HomeController extends AbstractController {
 	 *     methods={"GET"}
 	 * )
 	 *
-	 * @throws \Twig_Error_Loader
-	 * @throws \Twig_Error_Runtime
-	 * @throws \Twig_Error_Syntax
+	 * @param Request $request
+	 *
+	 * @return Response
 	 */
 	public function index(  Request $request ): Response {
 				return $this->render( 'home/index.html.twig', [
-			'message' => "Mi tityulo con script in titl +ADw-script+AD4-alert('hola')+ADsAPA-/script+AD4-"
+			'message' => "Entro"
 		] );
 	}
 }

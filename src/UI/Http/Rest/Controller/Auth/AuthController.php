@@ -1,7 +1,10 @@
 <?php
 
+declare( strict_types=1 );
+
 namespace App\UI\Http\Rest\Controller\Auth;
 
+use Exception;
 use League\OAuth2\Server\AuthorizationServer;
 use League\OAuth2\Server\Exception\OAuthServerException;
 use League\OAuth2\Server\Grant\PasswordGrant;
@@ -15,15 +18,12 @@ final class AuthController
 	/**
 	 * @var AuthorizationServer
 	 */
-	private $authorizationServer;
+	private AuthorizationServer $authorizationServer;
 	/**
 	 * @var PasswordGrant
 	 */
-	private $passwordGrant;
-	/**
-	 * @var dispatcher
-	 */
-	private $dispatcher;
+	private PasswordGrant $passwordGrant;
+
 	/**
 	 * AuthController constructor.
 	 * @param AuthorizationServer $authorizationServer
@@ -41,12 +41,10 @@ final class AuthController
 	 * @param ServerRequestInterface $request
 	 *
 	 * @return null|Psr7Response
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function getAccessToken(ServerRequestInterface $request): ?Psr7Response
 	{
-
-
 		$this->passwordGrant->setRefreshTokenTTL(new \DateInterval('P1M'));
 		return $this->withErrorHandling(function () use ($request) {
 
@@ -62,20 +60,19 @@ final class AuthController
 	}
 	private function withErrorHandling($callback): ?Psr7Response
 	{
-
 		try {
-
 			return $callback();
 		} catch (OAuthServerException $e) {
 			return $this->convertResponse(
 				$e->generateHttpResponse(new Psr7Response())
 			);
-		} catch (\Exception $e) {
+		} catch ( Exception $e) {
 			return new Psr7Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
 		} catch (\Throwable $e) {
 			return new Psr7Response($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	private function convertResponse(Psr7Response $psrResponse): Psr7Response
 	{
 		return new Psr7Response(

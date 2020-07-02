@@ -1,4 +1,7 @@
 <?php
+
+declare( strict_types=1 );
+
 namespace App\Infrastructure\oAuth2Server\Bridge;
 
 use App\Domain\Auth\Repository\ClientRepositoryInterface as AppClientRepositoryInterface;
@@ -10,16 +13,25 @@ final class ClientRepository implements ClientRepositoryInterface
 	/**
 	 * @var AppClientRepositoryInterface
 	 */
-	private $appClientRepository;
+	private AppClientRepositoryInterface $appClientRepository;
+
 	/**
 	 * ClientRepository constructor.
-	 * @param AppClientRepositoryInterface $clientRepository
+	 *
+	 * @param AppClientRepositoryInterface $appClientRepository
 	 */
 	public function __construct(AppClientRepositoryInterface $appClientRepository)
 	{
 		$this->appClientRepository = $appClientRepository;
 	}
+
 	/**
+	 * @param $clientIdentifier
+	 * @param null $grantType
+	 * @param null $clientSecret
+	 * @param bool $mustValidateSecret
+	 *
+	 * @return ClientEntityInterface|null
 	 */
 	public function getClientEntity(
 		$clientIdentifier,
@@ -35,9 +47,8 @@ final class ClientRepository implements ClientRepositoryInterface
 		if ($mustValidateSecret && !hash_equals($appClient->getSecret(), (string)$clientSecret)) {
 			return null;
 		}
-		$oauthClient = new Client($clientIdentifier, $appClient->getName(), $appClient->getRedirect());
 
-		return $oauthClient;
+		return new Client($clientIdentifier, $appClient->getName(), $appClient->getRedirect());
 	}
 
 	public function validateClient( $clientIdentifier, $clientSecret, $grantType ) {

@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by jeek.
- * User: Jose Manuel Suárez Bravo
- * Date: 30/01/19
- * Time: 10:06
- */
+
+declare( strict_types=1 );
 
 namespace App\Infrastructure\Persistence\Doctrine\Auth;
 

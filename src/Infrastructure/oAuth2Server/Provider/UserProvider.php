@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by jeek.
- * User: Jose Manuel Suárez Bravo
- * Date: 29/01/19
- * Time: 16:51
- */
+
+declare( strict_types=1 );
 
 namespace App\Infrastructure\oAuth2Server\Provider;
 
@@ -15,23 +11,42 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
+/**
+ * Class UserProvider
+ * @package App\Infrastructure\oAuth2Server\Provider
+ */
 final class UserProvider implements UserProviderInterface
 {
 	/**
 	 * @var AuthRepositoryInterface
 	 */
-	private $authRepository;
+	private AuthRepositoryInterface $authRepository;
 
+	/**
+	 * UserProvider constructor.
+	 *
+	 * @param AuthRepositoryInterface $authRepository
+	 */
 	public function __construct(AuthRepositoryInterface $authRepository)
 	{
 		$this->authRepository = $authRepository;
 	}
 
+	/**
+	 * @param string $username
+	 *
+	 * @return UserInterface
+	 */
 	public function loadUserByUsername($username): UserInterface
 	{
 		return $this->findUsername($username);
 	}
 
+	/**
+	 * @param string $username
+	 *
+	 * @return User
+	 */
 	private function findUsername(string $username): User
 	{
 		$user = $this->authRepository->findOneByEmail($username);
@@ -43,6 +58,11 @@ final class UserProvider implements UserProviderInterface
 		);
 	}
 
+	/**
+	 * @param UserInterface $user
+	 *
+	 * @return UserInterface
+	 */
 	public function refreshUser(UserInterface $user): UserInterface
 	{
 		if (!$user instanceof User) {
@@ -56,6 +76,11 @@ final class UserProvider implements UserProviderInterface
 		return $this->findUsername($username);
 	}
 
+	/**
+	 * @param string $class
+	 *
+	 * @return bool
+	 */
 	public function supportsClass($class): bool
 	{
 		return User::class === $class;

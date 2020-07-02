@@ -6,7 +6,7 @@ namespace App\Domain\Auth\Exception;
 
 use Throwable;
 
-class UsernameNotValidException extends \Exception {
+class UsernameNotValidException extends \InvalidArgumentException {
 
 	private string $detail;
 

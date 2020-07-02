@@ -1,4 +1,7 @@
 <?php
+
+declare( strict_types=1 );
+
 namespace App\Infrastructure\oAuth2Server\Bridge;
 
 use League\OAuth2\Server\Entities\ClientEntityInterface;
@@ -6,18 +9,17 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use App\Domain\Auth\Repository\AuthRepositoryInterface as AppUserRepositoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 final class UserRepository implements UserRepositoryInterface
 {
 	/**
 	 * @var AppUserRepositoryInterface
 	 */
-	private $appUserRepository;
+	private AppUserRepositoryInterface $appUserRepository;
 	/**
 	 * @var UserPasswordEncoderInterface
 	 */
-	private $userPasswordEncoder;
+	private UserPasswordEncoderInterface $userPasswordEncoder;
 	/**
 	 * @var EventDispatcherInterface
 	 */
@@ -37,7 +39,14 @@ final class UserRepository implements UserRepositoryInterface
 		//$this->dispatcher = $dispatcher;
 
 	}
+
 	/**
+	 * @param $username
+	 * @param $password
+	 * @param $grantType
+	 * @param ClientEntityInterface $clientEntity
+	 *
+	 * @return UserEntityInterface|null
 	 */
 	public function getUserEntityByUserCredentials(
 		$username,

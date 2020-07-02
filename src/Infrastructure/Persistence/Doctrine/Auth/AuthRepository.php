@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by jeek.
- * User: Jose Manuel Suárez Bravo
- * Date: 29/01/19
- * Time: 17:00
- */
+
+declare( strict_types=1 );
 
 namespace App\Infrastructure\Persistence\Doctrine\Auth;
-
 
 use App\Domain\Auth\Model\User;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
@@ -23,7 +18,7 @@ final class AuthRepository implements AuthRepositoryInterface
 	/**
 	 * @var EntityManagerInterface
 	 */
-	private $entityManager;
+	private EntityManagerInterface $entityManager;
 	/**
 	 * @var ObjectRepository
 	 */
