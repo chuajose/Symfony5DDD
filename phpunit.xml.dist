@@ -16,13 +16,7 @@
         <env name="APP_ENV" value="test" />
         <env name="MAILER_FROM" value="info@jeek.io" />
         <env name="SHELL_VERBOSITY" value="-1" />
-        <env name="APP_DEBUG" value="1" />
-        <env name="REDIS_HOST" value="redis" />
-        <env name="REDIS_PORT" value="6379" />
-        <env name="AWS_KEY" value="AKIAJ5THCROWA7GW3LYQ" />
-        <env name="AWS_SECRET" value="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" />
-        <env name="AWS_BUCKET" value="jeek-demo" />
-        <env name="AWS_BUCKET_TARGET" value="jeek-proba" />
+        <env name="APP_DEBUG" value="1" />>
     </php>
 
     <testsuites>
