@@ -2,39 +2,21 @@
 
 declare( strict_types=1 );
 
-/**
- * Created by jeek.
- * User: Jose Manuel Suárez Bravo
- * Date: 17/12/19
- * Time: 11:25
- */
-
 namespace App\Tests\Application\Auth;
 
 use App\Application\Auth\Dto\RegisterUserDto;
-use App\Application\Auth\Events\UserWasRegister;
 use App\Application\Auth\Exceptions\RegisterUserException;
-use App\Application\Auth\Exceptions\ValidationException;
 use App\Application\Auth\RegisterUseCase;
 use App\Domain\Auth\Model\User;
-use App\Domain\Auth\Model\UserId;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
-use App\Domain\Auth\ValueObject\Email;
-use App\Domain\Auth\ValueObject\Password;
-use App\Infrastructure\EventDispatcher\EventDispatcherInterface;
-use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class RegisterUseCaseTest extends KernelTestCase {
 
 	private $encodePassword;
-	private $eventDispatcher;
 	private $authRepository;
 	private $user;
-	private $eventRegister;
 
 	/**
 	 *
