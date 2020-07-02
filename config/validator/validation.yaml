@@ -1,0 +1,16 @@
+
+App\Application\Auth\Dto\RegisterUserDto:
+    properties:
+        email:
+            - NotBlank: ~
+            - Email: ~
+        name:
+            - NotBlank: ~
+        username:
+            - NotBlank: ~
+            - Length:
+                min: 6
+        password:
+            - NotBlank: ~
+            - Length:
+                min: 8

@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="section">
+<div class="container">
+    <div class="columns is-centered">
+        <div class="column is-half">
+            {% if errors is defined %}
+                {% for error in errors %}
+                    <div class="notification is-danger">{{ error['detail'] }}</div>
+                {% endfor %}
+            {% endif %}
+            <form name="signUp"  method="post">
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" type="text" placeholder="Nombre" value=""
+                               name="name" required autofocus>
+                        <span class="icon is-small is-left">
+      <i class="fas fa-user"></i>
+    </span>
+                        <span class="icon is-small is-right">
+      <i class="fas fa-check"></i>
+    </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" type="text" placeholder="username" value=""
+                               name="username" required autofocus>
+                        <span class="icon is-small is-left">
+      <i class="fas fa-user"></i>
+    </span>
+                        <span class="icon is-small is-right">
+      <i class="fas fa-check"></i>
+    </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left has-icons-right">
+                        <input class="input" type="email" placeholder="Email" value=""
+                               name="email" required autofocus>
+                        <span class="icon is-small is-left">
+      <i class="fas fa-envelope"></i>
+    </span>
+                        <span class="icon is-small is-right">
+      <i class="fas fa-check"></i>
+    </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control has-icons-left">
+                        <input class="input" type="password" name="password" placeholder="Password" required>
+                        <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
+                    </p>
+                </div>
+                <div class="field">
+                    <p class="control">
+                        <button class="button is-success">Registro
+                        </button>
+                    </p>
+                </div>
+
+
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}"
+                >
+
+
+
+
+                <div class="field">
+                    <div class="control">
+                        <input class="button is-link" type="submit" value="Send">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+    </section>
+{% endblock body %}

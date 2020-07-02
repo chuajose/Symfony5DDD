@@ -22,6 +22,36 @@ services:
     #App\Controller\:
     #    resource: '../src/Controller'
     #    tags: ['controller.service_arguments']
+    App\UI\Http\Rest\Controller\:
+        resource: '../src/UI/Http/Rest/Controller'
+        tags: ['controller.service_arguments']
 
-    # add more service definitions when explicit configuration is needed
+    App\UI\Http\Web\Controller\:
+        resource: '../src/UI/Http/Web/Controller/*'
+        tags: [ 'controller.service_arguments' ]
+
+    # Define infrastructre to oauthserver
     # please note that last definitions always *replace* previous ones
+    League\OAuth2\Server\AuthorizationServer:
+        arguments:
+            $clientRepository: '@App\Infrastructure\oAuth2Server\Bridge\ClientRepository'
+            $accessTokenRepository: '@App\Infrastructure\oAuth2Server\Bridge\AccessTokenRepository'
+            $scopeRepository: '@App\Infrastructure\oAuth2Server\Bridge\ScopeRepository'
+            $privateKey: '%env(OAUTH2_PRIVATE_KEY)%'
+            $encryptionKey: '%env(OAUTH2_ENCRYPTION_KEY)%'
+
+    League\OAuth2\Server\Grant\PasswordGrant:
+        arguments:
+            $userRepository: '@App\Infrastructure\oAuth2Server\Bridge\UserRepository'
+            $refreshTokenRepository: '@App\Infrastructure\oAuth2Server\Bridge\RefreshTokenRepository'
+
+    League\OAuth2\Server\Grant\RefreshTokenGrant:
+        arguments:
+            $refreshTokenRepository: '@App\Infrastructure\oAuth2Server\Bridge\RefreshTokenRepository'
+
+    League\OAuth2\Server\ResourceServer:
+        arguments:
+            $accessTokenRepository: '@App\Infrastructure\oAuth2Server\Bridge\AccessTokenRepository'
+            $publicKey: '%env(OAUTH2_PUBLIC_KEY)%'
+
+

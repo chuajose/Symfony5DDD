@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section class="section">
+
+<div class="container">
+
+
+    <div class="card">
+        <header class="card-header">
+            <p class="card-header-title">
+                {{ data.name }}
+                <a href="profile/edit" class="button">Editar</a>
+            </p>
+            <a href="#" class="card-header-icon" aria-label="more options">
+      <span class="icon">
+        <i class="fas fa-angle-down" aria-hidden="true"></i>
+      </span>
+            </a>
+        </header>
+
+        <div class="card-content">
+            <div class="content">
+
+              {{ data.username }}<br>
+                Se unio en {{ data.created_at | date('Y-m-d H:i:s') }}
+            </div>
+            
+        </div>
+
+    </div>
+</div>
+    </section>
+
+{% endblock body %}

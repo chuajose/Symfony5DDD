@@ -1,3 +1,15 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+api_controllers:
+  resource: '../src/UI/Http/Rest/Controller/'
+  type: annotation
+  prefix: /api
+
+web_controllers:
+  resource: '../src/UI/Http/Web/Controller/'
+  type: annotation
+
+app_logout:
+  path: /logout
+  methods: GET

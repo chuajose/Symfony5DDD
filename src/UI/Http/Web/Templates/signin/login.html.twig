@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+
+        <div class="tile is-parent">
+            <article class="tile is-child notification">
+                <p class="title">Login</p>
+                <p class="subtitle">Accede a JEEK</p>
+                <div class="content">
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+
+
+                        <div class="field">
+                            <p class="control has-icons-left has-icons-right">
+                                <input class="input" type="email" placeholder="Email" value="{{ last_username }}"
+                                       name="email" required autofocus>
+                                <span class="icon is-small is-left">
+      <i class="fas fa-envelope"></i>
+    </span>
+                                <span class="icon is-small is-right">
+      <i class="fas fa-check"></i>
+    </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control has-icons-left">
+                                <input class="input" type="password" name="password" placeholder="Password" required>
+                                <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
+                            </p>
+                        </div>
+                        <div class="field">
+                            <p class="control">
+                                <button class="button is-success">
+                                    Login
+                                </button>
+                            </p>
+                        </div>
+
+
+                        <input type="hidden" name="_csrf_token"
+                               value="{{ csrf_token('authenticate') }}"
+                        >
+
+                        {#
+                           Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                           See https://symfony.com/doc/current/security/remember_me.html
+                            <div class="checkbox mb-3">
+                               <label>
+                                   <input type="checkbox" name="_remember_me"> Remember me
+                               </label>
+                           </div>
+                       #}
+
+
+                    </form>
+                </div>
+            </article>
+        </div>
+    </div>
+{% endblock body %}

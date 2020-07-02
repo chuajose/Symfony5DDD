@@ -1,0 +1,25 @@
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping">
+    <entity name="App\Domain\Auth\Model\User">
+        <id name="id" type="uuid" column="id">
+            <!--  <generator strategy="UUID"/>-->
+        </id>
+        <field name="name" type="string"/>
+        <field name="username" type="string"/>
+        <field name="password" type="string"/>
+        <field name="email" type="string"/>
+        <field name="roles" type="json_array"/>
+        <field name="active" type="boolean"/>
+        <field name="reset_token" type="string" nullable="true"/>
+        <field name="created_at" type="datetime">
+            <options>
+                <option name="default">CURRENT_TIMESTAMP</option>
+            </options>
+        </field>
+        <field name="updated_at" type="datetime">
+            <options>
+                <option name="default">CURRENT_TIMESTAMP</option>
+            </options>
+        </field>
+    </entity>
+
+</doctrine-mapping>

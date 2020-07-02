@@ -1,0 +1,94 @@
+<nav class="navbar is-fixed-top" style="box-shadow: 1px -4px 18px #ccc;">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="/">
+            <h2>LasT</h2>
+        </a>
+        <div class="navbar-burger burger" data-target="nav">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    <div id="nav" class="navbar-menu">
+        <div class="navbar-start">
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">
+                    Docs
+                </a>
+                <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="/api/doc">
+                        API
+                    </a>
+                    <a class="navbar-item" href="/">
+                        Modifiers
+                    </a>
+                </div>
+            </div>
+            {% if is_granted('ROLE_USER') %}
+                <div class="navbar-item">
+                    <a class="navbar-item" href="/users">
+                        Usuarios
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="navbar-end">
+            {% if is_granted('ROLE_USER') %}
+            <div class="navbar-item  is-hoverable">
+                <a href="/notifications"  class=" ">
+                    <i class="far fa-bell"></i>
+
+
+                </a>
+                <div class="navbar-dropdown is-boxed">
+                        <div class="dropdown-item">
+                            <p>You can insert <strong>any type of content</strong> within the dropdown menu.</p>
+                        </div>
+                        <hr class="dropdown-divider">
+                        <div class="dropdown-item">
+                            <p>You simply need to use a <code>&lt;div&gt;</code> instead.</p>
+                        </div>
+                        <hr class="dropdown-divider">
+                        <a href="#" class="dropdown-item">
+                            This is a link
+                        </a>
+
+                </div>
+            </div>
+
+
+            <div class="navbar-item  is-hoverable">
+                    <a class="navbar-link ">
+                        {{ app.user.username }}
+                    </a>
+
+                <div class="navbar-dropdown is-boxed">
+                    <a class="navbar-item" href="/profile">
+                        Perfil
+                    </a>
+                    <a class="navbar-item" href="/logout">
+                        salir
+                    </a>
+
+                </div>
+            </div>
+                {% else %}
+            <div class="navbar-item ">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <a class=" " href="/login">
+                               Login
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a class=" " href="/register">
+                                Registro
+                            </a>
+                        </div>
+                    </div>
+            </div>
+                {% endif %}
+        </div>
+    </div>
+</nav>
