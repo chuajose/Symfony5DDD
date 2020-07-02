@@ -24,6 +24,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
+use App\Infrastructure\Mailer\Sender\Adapter\MailerInterface;
+use App\Infrastructure\Mailer\Sender\SenderInterface;
 
 final class RecoveryPasswordController extends AbstractController{
 
@@ -31,13 +33,15 @@ final class RecoveryPasswordController extends AbstractController{
 	private $userRepository;
 	private $userPasswordEncoder;
 	private $tokenGenerator;
+	private $mailer;
 
-	function __construct( PasswordRecoveryRepositoryInterface $passwordRecovery, AuthRepositoryInterface $userRepository, UserPasswordEncoderInterface $userPasswordEncoder,  TokenGeneratorInterface $tokenGenerator ) {
+	function __construct( PasswordRecoveryRepositoryInterface $passwordRecovery, AuthRepositoryInterface $userRepository, UserPasswordEncoderInterface $userPasswordEncoder,  TokenGeneratorInterface $tokenGenerator, SenderInterface $mailer ) {
 
 		$this->userRepository      = $userRepository;
 		$this->userPasswordEncoder = $userPasswordEncoder;
 		$this->tokenGenerator = $tokenGenerator;
 		$this->passwordRecovery = $passwordRecovery;
+		$this->mailer = $mailer;
 	}
 
 

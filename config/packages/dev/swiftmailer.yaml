@@ -1,0 +1,11 @@
+# See https://symfony.com/doc/current/email/dev_environment.html
+swiftmailer:
+  transport: smtp
+  host:      smtp.mailtrap.io
+  username:  dd8e2cce2912ab
+  password:  ff09dd824de186
+  auth_mode: cram-md5
+  port: 2525
+  spool:
+    type: file
+    path: '%kernel.project_dir%/var/spool'
