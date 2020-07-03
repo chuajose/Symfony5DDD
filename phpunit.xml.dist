@@ -13,7 +13,7 @@
         <server name="KERNEL_CLASS" value="App\Kernel" />
         <server name="KERNEL_DIR" value="src/" />
         <env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" />
-        <env name="APP_ENV" value="test" />
+        <env name="APP_ENV" value="dev" />
         <env name="MAILER_FROM" value="info@jeek.io" />
         <env name="SHELL_VERBOSITY" value="-1" />
         <env name="APP_DEBUG" value="1" />>
