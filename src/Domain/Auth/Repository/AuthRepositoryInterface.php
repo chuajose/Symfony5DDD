@@ -5,11 +5,11 @@ declare( strict_types=1 );
 namespace App\Domain\Auth\Repository;
 
 use App\Domain\Auth\Model\User;
-use Ramsey\Uuid\UuidInterface;
+use App\Domain\Auth\Model\UserId;
 
 interface AuthRepositoryInterface {
 
-	public function find(UuidInterface $id): ?User;
+	public function find(UserId $id): ?User;
 	public function findAll(): ?array ;
 	public function findOneByEmail(string $email): ?User;
 	public function findOneByUsername(string $username): ?User;

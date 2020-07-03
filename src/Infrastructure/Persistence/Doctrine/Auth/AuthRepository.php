@@ -5,12 +5,11 @@ declare( strict_types=1 );
 namespace App\Infrastructure\Persistence\Doctrine\Auth;
 
 use App\Domain\Auth\Model\User;
+use App\Domain\Auth\Model\UserId;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
 use Doctrine\Common\Persistence\ObjectRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\ResultSetMapping;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 
 final class AuthRepository implements AuthRepositoryInterface
 {
@@ -33,7 +32,7 @@ final class AuthRepository implements AuthRepositoryInterface
 		$this->entityManager = $entityManager;
 		$this->objectRepository = $this->entityManager->getRepository(self::ENTITY);
 	}
-	public function find(UuidInterface $id): ?User
+	public function find(UserId $id): ?User
 	{
 		return $this->entityManager->find(self::ENTITY, $id->toString());
 	}
@@ -85,7 +84,7 @@ final class AuthRepository implements AuthRepositoryInterface
 		$query = $this->entityManager->createNativeQuery($sql, $rsm);
 
 		$email = $query->getResult();
-		return  $this->find(Uuid::fromString($email[0]->getId()));
+		return  $this->find(UserId::fromString($email[0]->getId()));
 
 	}
 }

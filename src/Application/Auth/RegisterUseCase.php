@@ -5,9 +5,11 @@ declare( strict_types=1 );
 namespace App\Application\Auth;
 
 use App\Application\Auth\Dto\RegisterUserDto;
+use App\Application\Auth\Events\UserWasRegistered;
 use App\Application\Auth\Exceptions\RegisterUserException;
 use App\Domain\Auth\Model\User;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
+use App\Domain\Shared\EventBus;
 use Exception;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -16,11 +18,12 @@ final class RegisterUseCase {
 
 	private AuthRepositoryInterface $authRepository;
 	private UserPasswordEncoderInterface $encodePassword;
-	private $dispatcher;
+	private $eventBus;
 
-	public function __construct( AuthRepositoryInterface $authRepository, UserPasswordEncoderInterface $encodePassword ) {
+	public function __construct( AuthRepositoryInterface $authRepository, UserPasswordEncoderInterface $encodePassword, EventBus $eventBus ) {
 		$this->authRepository = $authRepository;
 		$this->encodePassword = $encodePassword;
+		$this->eventBus = $eventBus;
 	}
 
 	public function __invoke(RegisterUserDto $userDto ) {
@@ -44,8 +47,8 @@ final class RegisterUseCase {
 			$user->setUpdatedAt( new \DateTimeImmutable( 'now' ) );
 			$this->authRepository->save( $user );
 
-			/*$event = new UserWasRegister($user);
-			$this->dispatcher->dispatch($event);*/
+			$event = new UserWasRegistered($user->getUsername(), $user->getEmail(), $user->getCreatedAt()->format('Y-m-d H:i:s'));
+			$this->eventBus->dispatch($event);
 			return $user;
 
 		}catch ( Exception $e ) {

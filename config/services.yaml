@@ -55,3 +55,9 @@ services:
             $publicKey: '%env(OAUTH2_PUBLIC_KEY)%'
 
 
+    event_handlers:
+        namespace: App\Infrastructure\Events\
+        resource: '%kernel.project_dir%/src/Infrastructure/Events/**/*EventHandler.php'
+        autoconfigure: false
+        tags:
+            - { name: messenger.message_handler, bus: event.bus }

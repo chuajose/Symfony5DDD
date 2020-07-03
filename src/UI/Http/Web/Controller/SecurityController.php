@@ -7,6 +7,7 @@ namespace App\UI\Http\Web\Controller;
 use App\Application\Auth\Dto\RegisterUserDto;
 use App\Application\Auth\RegisterUseCase;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
+use App\Domain\Shared\EventBus;
 use Assert\AssertionFailedException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,13 +23,16 @@ class SecurityController extends AbstractController
 {
 	private AuthRepositoryInterface $userRepository;
 	private UserPasswordEncoderInterface $userPasswordEncoder;
+	private EventBus $eventBus;
 
 	public function __construct(
 		UserPasswordEncoderInterface $userPasswordEncoder,
-		AuthRepositoryInterface $userRepository
+		AuthRepositoryInterface $userRepository,
+		EventBus $eventBus
 	){
 		$this->userPasswordEncoder = $userPasswordEncoder;
 		$this->userRepository = $userRepository;
+		$this->eventBus = $eventBus;
 	}
 
 
@@ -89,7 +93,7 @@ class SecurityController extends AbstractController
 						];
 					}
 				}else{
-					$create          = new RegisterUseCase( $this->userRepository, $this->userPasswordEncoder );
+					$create          = new RegisterUseCase( $this->userRepository, $this->userPasswordEncoder, $this->eventBus );
 					$user = $create( $registerUserDto );
 					$token = new UsernamePasswordToken($user, null, 'main', ['ROLE_USER']);
 					$this->get('security.token_storage')->setToken($token);

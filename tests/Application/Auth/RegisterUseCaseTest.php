@@ -9,6 +9,7 @@ use App\Application\Auth\Exceptions\RegisterUserException;
 use App\Application\Auth\RegisterUseCase;
 use App\Domain\Auth\Model\User;
 use App\Domain\Auth\Repository\AuthRepositoryInterface;
+use App\Domain\Shared\EventBus;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -17,6 +18,7 @@ final class RegisterUseCaseTest extends KernelTestCase {
 	private $encodePassword;
 	private $authRepository;
 	private $user;
+	private $eventBus;
 
 	/**
 	 *
@@ -33,10 +35,10 @@ final class RegisterUseCaseTest extends KernelTestCase {
 
 		);
 		$this->authRepository->expects($this->once())->method('findOneByEmail')->willReturn(null);
-		//$this->eventDispatcher->expects($this->once())->method('dispatch');
+		$this->eventBus->expects($this->once())->method('dispatch');
 
 
-		$create          = new RegisterUseCase( $this->authRepository,$this->encodePassword );
+		$create          = new RegisterUseCase( $this->authRepository,$this->encodePassword, $this->eventBus );
 		$register = $create( $registerUserDtop );
 
 		return self::assertSame($registerUserDtop->getEmail()->toString(), $register->getEmail());
@@ -60,10 +62,10 @@ final class RegisterUseCaseTest extends KernelTestCase {
 			'Madfasf.s54634',
 		);
 		$this->authRepository->expects($this->once())->method('findOneByEmail')->willReturn($this->user);
-		//$this->eventDispatcher->expects($this->never())->method('dispatch');
+		$this->eventBus->expects($this->never())->method('dispatch');
 
 
-		$create          = new RegisterUseCase( $this->authRepository,$this->encodePassword );
+		$create          = new RegisterUseCase( $this->authRepository, $this->encodePassword, $this->eventBus );
 		$register = $create( $registerUserDtop );
 	}
 
@@ -73,7 +75,7 @@ final class RegisterUseCaseTest extends KernelTestCase {
 		$this->encodePassword            = self::$container->get(UserPasswordEncoderInterface::class);
 		$this->authRepository            = self::createMock( AuthRepositoryInterface::class );
 		$this->user = self::createMock(User::class);
-		//$this->eventRegister = self::createMock(UserWasRegister::class);
+		$this->eventBus = self::createMock(EventBus::class);
 
 
 	}

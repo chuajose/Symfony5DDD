@@ -6,10 +6,11 @@ namespace App\Domain\Auth\Model;
 
 use App\Domain\Auth\ValueObject\Email;
 use App\Domain\Auth\ValueObject\Username;
+use App\Domain\Shared\Aggregate\AggregateRoot;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Ramsey\Uuid\Uuid;
 
-class User implements UserInterface {
+class User extends AggregateRoot implements UserInterface {
 	/**
 	 * @var string
 	 */
