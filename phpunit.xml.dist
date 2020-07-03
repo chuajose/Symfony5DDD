@@ -16,15 +16,13 @@
         <env name="APP_ENV" value="test" />
         <env name="MAILER_FROM" value="info@jeek.io" />
         <env name="SHELL_VERBOSITY" value="-1" />
-        <env name="APP_DEBUG" value="1" />>
+        <env name="APP_DEBUG" value="1" />
     </php>
-
     <testsuites>
         <testsuite name="Project Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-
     <filter>
         <whitelist>
             <directory>src</directory>
