@@ -26,7 +26,7 @@ final class ProfileController extends AbstractController {
 
 		$user = $this->getUser();
 		if ( null === $user ) {
-			return $this->redirectToRoute('login');
+			return $this->redirectToRoute('app_login');
 		}
 
 		$data = [
